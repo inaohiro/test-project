@@ -1,6 +1,8 @@
+# coding utf-8
+
 class Weather < ApplicationRecord
 
-  def scrape()
+  def webscrape()
 
     # URLにアクセスするためのライブラリの読み込み
     require 'open-uri'
