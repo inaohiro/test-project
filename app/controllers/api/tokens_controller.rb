@@ -4,10 +4,18 @@ class Api::TokensController < ApplicationController
 
   def create
     # token を発行する
-    # 一応 URL safe なもの
+    token = Token.new
+
+    # ユーザに保存してもらう token
+    token_string = token.generate
+
+    puts token_string
+
+    # データベースに保存する際はハッシュ化する
+    token.update_attributes(hashed_token: token.hash(token_string))
 
     render json: {
-      token: "hogehoge"
+      token: token_string
     }
   end
 end

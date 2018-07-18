@@ -2,7 +2,7 @@
 // そっちのほうがより良いはず
 // とりあえずの実装のため、今回は localstorage を使ったもの
 
-const baseURL = 'http://118.27.22.220:3000';
+const baseURL = <IP Address>
 
 // localstorage にアクセスして token があるかを確認する
 if (localStorage.getItem('token')) {
