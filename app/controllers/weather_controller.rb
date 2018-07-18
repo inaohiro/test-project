@@ -3,9 +3,8 @@
 class WeatherController < ApplicationController
   
   def controller
-
-    Weather.webscrape()
-
+    weather = Weather.new
+    @msg = weather.webscrape()
   end
 
 end
