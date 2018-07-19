@@ -1,0 +1,13 @@
+設定
+
+<% if @data %>
+<button>next</button>
+<% end %>
+
+<script type="text/javascript">
+(function() {
+  document.querySelector("button").addEventListener("click", function() {
+    window.location = `${baseURL}/app`;
+  }, false)
+ })();
+</script>
