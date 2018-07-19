@@ -3,94 +3,115 @@
 class Weather < ApplicationRecord
 
   def webscrape()
+	# ウェブスクレイピング元データ1
+        def setother(doc,other)
+        	arr = Array.new
+        	doc.xpath('//td').each do |node|
+            		s = node.inner_text
+            		arr.push(s)
+        	end
+        	other = arr
+    	end
+    	# ウェブスクレイピング元データ2の整形
+    	def setother2(doc,other2)
+        	arr = Array.new
+        	doc.xpath('//th').each do |node|
+            		s = node.inner_text
+            		s.gsub!(/\n    /,'')
+            		s.gsub!(/\n  /,'')
+            		arr.push(s)
+        	end
+        	other2 = arr[7..31]+arr[46..70]
+    	end
 
-  # 日付整形
-    def shaping(s,n,m)
-      s2 = s.split("")
-      s3 = s2[n..m]
-      s3.select!{ |item| item =~ /^[0-9日月火水木金土]/}
-    end
+    	#日付と曜日取得
+    	def getdate(other2,date,day_of_the_week)
 
-    def scrape()
-      # URLにアクセスするためのライブラリの読み込み
-      require 'open-uri'
-      # Nokogiriライブラリの読み込み
-      require 'nokogiri'
+        	for i in 0..9 do
+            		date[i]=other2[5*i]
+        	end
 
-      # スクレイピング先のURL
-      url = 'https://tenki.jp/forecast/3/16/4410/13113/'
+        	for i in 0..9 do
+             		date[i].sub!(/月/,'/')
+             		date[i].sub!(/日/,'')
+             		day_of_the_week.push(date[i][-2])
+             		date[i].slice!(-3..-1)
+            		if date[i][0] == "0" then
+                		date[i].slice!(0)
+            		end
+        	end
+    	end
 
-      charset = nil
-      html = open(url) do |f|
-        charset = f.charset # 文字種別を取得
-        f.read # htmlを読み込んで変数htmlに渡す
-      end
+    	#降水量取得
+    	def getrainprobability(other2,rainprobability)
+        	for i in 0..9 do
+            		rainprobability[i]=other2[5*i+3].delete("%").to_i
+        	end
+    	end
 
-      # htmlをパース(解析)してオブジェクトを生成
-      doc = Nokogiri::HTML.parse(html, nil, charset)
+    	#天気(午前午後)取得
+    	def getweather(other,weatherAM,weatherPM)
+        	for i in 0..39 do
+        		if i%4 == 1 then
+        	        	weatherAM.push(other[i*7+1])
+        	    	elsif i%4 == 2 then
+                		weatherPM.push(other[i*7+1])
+        	    	end
+        	end
+    	end
 
-      date = Array.new
-      weather = Array.new
-      rainprobability = Array.new
-  
-      # 今日と明日の日付
-      doc.xpath('//h3[@class="left-style"]').each do |node|
-        s = node.inner_text
-        s2 = shaping(s,3,11)
-        if s2.empty? == false then
-          date.push(s2)
-        end
-      end
-      # 3~10日後の日付
-      doc.xpath('//td[@class="cityday"]').each do |node|
-        s = node.inner_text
-        s2 = shaping(s,0,20)
-        if s2.empty? == false then
-          date.push(s2)
-        end
-      end
+    	#本体
+    	def scrape()
+        	# URLにアクセスするためのライブラリの読み込み
+        	require 'open-uri'
+        	# Nokogiriライブラリの読み込み
+        	require 'nokogiri'
+        	# スクレイピング先のURL
+        	url = 'https://tenki.jp/forecast/3/16/4410/13113/10days.html'
 
-      # 今日と明日の天気
-      doc.xpath('//div[@class="weather-icon"]').each do |node|
-        s = node.css('img').attribute('title').value
-        weather.push(s)
-      end
+        	charset = nil
+        	html = open(url) do |f|
+        		charset = f.charset # 文字種別を取得
+            		f.read # htmlを読み込んで変数htmlに渡す
+        	end
 
-      # 3~10日後の天気
-      doc.xpath('//td[@class="weather-icon"]').each do |node|
-        s = node.css('img').attribute('title').value
-        weather.push(s)
-      end
-  
-      # 今日と明日の降水確率(最大値)
-      doc.xpath('//tr[@class="rain-probability"]').each do |node|
-        s = node.inner_text
-        s2 = s.split("\n      ")
-        s4 = s2[2..5].map!{|item| item.delete("  ")}
-        s4.delete("---")
-        s4.map!{|item| item.delete("%")}.map!(&:to_i)
-        rainprobability.push(s4.max)
-      end
-  
-      # 3~10日後の降水確率
-      doc.xpath('//p[@class="precip"]').each do |node|
-        s = node.inner_text
-        s.delete!("%").to_i
-        rainprobability.push(s)
-      end
+        	# htmlをパース(解析)してオブジェクトを生成
+        	doc = Nokogiri::HTML.parse(html, nil, charset)
 
-      # ハッシュ作成
-      hash = {}
-      for i in 0..9 do
-        data = [weather[i], rainprobability[i]]
-        hash.store(date[i],data)
-      end
-      p hash
-  
-      end
+        	other = Array.new
+        	other2 = Array.new
 
-    scrape()
+        	date = Array.new(10)
+        	day_of_the_week = Array.new
+        	weatherAM= Array.new
+        	weatherPM= Array.new
+        	rainprobability = Array.new
 
-    end
+        	other = setother(doc,other)
+        	other2 = setother2(doc,other2)
+
+       		getdate(other2,date,day_of_the_week)
+        	getrainprobability(other2,rainprobability)
+
+        	getweather(other,weatherAM,weatherPM)
+
+        	# ハッシュ作成
+        	data = Array.new
+        	for i in 0..9 do
+            		data[i]={}
+            		data[i]["date"]=date[i]
+            		data[i]["day_of_the_week"]=day_of_the_week[i]
+            		data[i]["weatherAM"]=weatherAM[i]
+            		data[i]["weatherPM"]=weatherPM[i]
+            		data[i]["rainprobability"]=rainprobability[i]
+        	end
+
+        	p data
+
+    	end
+
+    	scrape()
+    
+  	end
 
 end
