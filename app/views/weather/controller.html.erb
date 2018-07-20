@@ -1,0 +1,25 @@
+<h1>Weather#controller</h1>
+
+<div class="place">
+  <span class="place"><%= @data[10] %></span>
+</div>
+
+<div class="today">
+  <span class="date"><%= @data[0]["date"] %></span>
+  <span class="youbi"><%= @data[0]["day_of_the_week"] %></span>
+  <span class="weatherAM"><%= @data[0]["weatherAM"] %></span>
+  <span class="weatherPM"><%= @data[0]["weatherPM"] %></span>
+  <span class="rainprobability"><%= @data[0]["rainprobability"] %></span>
+</div>
+
+<div class="weekly">
+  <% for i in 1..9 do%>
+    <div>
+      <span class="date"><%= @data[i]["date"] %></span>
+      <span class="youbi"><%= @data[i]["day_of_the_week"] %></span>
+      <span class="weatherAM"><%= @data[i]["weatherAM"] %></span>
+      <span class="weatherPM"><%= @data[i]["weatherPM"] %></span>
+      <span class="rainprobability"><%= @data[i]["rainprobability"] %></span>
+    </div>
+  <% end %>
+</div>
