@@ -24,6 +24,10 @@ class Weather < ApplicationRecord
         	other2 = arr[7..31]+arr[46..70]
     	end
 
+	def getplace(doc)
+		doc.xpath("//ol[@class='breadcrumb-navi clearfix']/li[4]/a/span").inner_text
+	end
+
     	#日付と曜日取得
     	def getdate(other2,date,day_of_the_week)
 
@@ -90,6 +94,7 @@ class Weather < ApplicationRecord
         	other = setother(doc,other)
         	other2 = setother2(doc,other2)
 
+		place = getplace(doc)
        		getdate(other2,date,day_of_the_week)
         	getrainprobability(other2,rainprobability)
 
@@ -106,6 +111,7 @@ class Weather < ApplicationRecord
             		data[i]["rainprobability"]=rainprobability[i]
         	end
 
+		data.push(place)
         	p data
 
     	end
