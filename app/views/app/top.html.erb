@@ -2,14 +2,10 @@
 <p>ここに天気を表示する</p>
 
 <button id="a">初期化</button>
-<button id="i">最初からもう一度試す</button>
+<a href="/"><button>最初からもう一度試す</button></a>
 
 <script type="text/javascript">
 document.querySelector("#a").addEventListener("click", function() {
   localStorage.clear();
-},false);
-
-document.querySelector("#i").addEventListener("click", function() {
-  window.location = `${baseURL}`;
 },false);
 </script>

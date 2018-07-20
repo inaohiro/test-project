@@ -1,13 +1,6 @@
 チュートリアル
 
 <% if @data %>
-  <button>next</button>
+  <a href="/settings"><button>next</button></a>
 <% end %>
 
-<script type="text/javascript">
-(function() {
-  document.querySelector("button").addEventListener("click", function() {
-    window.location = `${baseURL}/settings?init=true`
-  }, false)
-})();
-</script>
