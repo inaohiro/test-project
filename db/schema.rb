@@ -28,4 +28,9 @@ ActiveRecord::Schema.define(version: 2018_07_18_152745) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "weathers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 end
