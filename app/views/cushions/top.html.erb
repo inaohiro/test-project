@@ -1,0 +1,25 @@
+<script type="text/javascript">
+// indexedDB は Service Woker を使って 非同期に データを保存できる
+// そっちのほうがより良いはず
+// とりあえずの実装のため、今回は localstorage を使ったもの
+
+// localstorage にアクセスして token があるかを確認する
+if (localStorage.getItem('token')) {
+  // use it
+  // console.log(localStorage.getItem('token'));
+  window.location = `${baseURL}/app`;
+  // console.log("hoge")
+}
+// なければ初回アクセスだとみなし、サーバから token を取得する
+else {
+  fetch(`${baseURL}/api/token`, {
+      method: 'POST'
+  })
+    .then((data) => data.json())
+    // localstorage 使って ブラウザに保存する
+    .then((json) => localStorage.setItem('token', json.token))
+    .then(() => window.location = `${baseURL}/tutorial?init=true`)
+    .catch((e) => { console.log(e); });
+
+}
+</script>
