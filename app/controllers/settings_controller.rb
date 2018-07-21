@@ -1,8 +1,6 @@
 class SettingsController < ApplicationController
   def settings
-    user = Token.find_by(id: session[:user_id])
-
-    @item = user.items.build if logged_in?
+    @item = current_user.items.build if logged_in?
   end
 
   def tutorial
