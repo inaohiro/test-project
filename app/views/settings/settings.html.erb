@@ -1,5 +1,11 @@
 設定
 
-<a href="/app"><button>next</button></a>
+<%= form_for(@user, url: settings_path) do |f| %>
+  <%= f.label :max, "please fill in the number of your total pants" %>
+  <%= f.number_field :max %>
 
+  <%= f.label :current, "please fill in the number of your clean pants" %>
+  <%= f.number_field :current %>
 
+  <%= f.submit "OK", class: "btn btn-primary" %>
+<% end %>
