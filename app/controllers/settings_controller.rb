@@ -1,6 +1,6 @@
 class SettingsController < ApplicationController
   def settings
-    @user = current_user.items.build if logged_in?
+    @item = current_user.items.build if logged_in?
   end
 
   def tutorial

@@ -6,12 +6,13 @@
 // localstorage にアクセスして token があるかを確認する
 if (localStorage.getItem('token')) {
   // window.location = `${baseURL}/app`;
-  fetch(`${baseURL}/api/token`, {
+  fetch('/api/token', {
     method: 'POST',
     redirect: 'follow',
     headers: {
       "Content-Type": "application/json; charset=utf-8"
     },
+    credentials: "same-origin",
     body: JSON.stringify({ token: localStorage.getItem('token') })
   })
     .then(() => window.location.pathname = '/app')
@@ -19,14 +20,15 @@ if (localStorage.getItem('token')) {
 }
 // なければ初回アクセスだとみなし、サーバから token を取得する
 else {
-  fetch(`${baseURL}/api/token`, {
-      method: 'POST',
-      redirect: 'follow'
+  fetch('/api/token', {
+    method: 'POST',
+    redirect: 'follow',
+    credentials: "same-origin",
   })
     .then((data) => data.json())
     // localstorage 使って ブラウザに保存する
     .then((json) => localStorage.setItem('token', json.token))
-    .then(() => window.location = `${baseURL}/tutorial?init=true`)
+    .then(() => window.location = '/tutorial?init=true')
     .catch((e) => { console.log(e); });
 
 }
