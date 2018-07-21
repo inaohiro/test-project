@@ -1,6 +1,8 @@
 設定
 
-<%= form_for(@user, url: settings_path) do |f| %>
+<%= @item %>
+
+<%= form_for(@item, url: settings_path) do |f| %>
   <%= f.label :max, "please fill in the number of your total pants" %>
   <%= f.number_field :max %>
 
