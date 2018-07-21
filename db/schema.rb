@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2018_07_18_152745) do
   end
 
   create_table "tokens", force: :cascade do |t|
-    t.string "hashed_token"
+    t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

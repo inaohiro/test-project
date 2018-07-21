@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   root 'cushions#top'
   get  'settings' =>  'settings#settings'
+  post 'settings' =>  'settings#create'
   get  'tutorial' =>  'settings#tutorial'
   get  'app' => 'app#top'
 

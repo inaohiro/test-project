@@ -5,15 +5,23 @@
 
 // localstorage にアクセスして token があるかを確認する
 if (localStorage.getItem('token')) {
-  // use it
-  // console.log(localStorage.getItem('token'));
-  window.location = `${baseURL}/app`;
-  // console.log("hoge")
+  // window.location = `${baseURL}/app`;
+  fetch(`${baseURL}/api/token`, {
+    method: 'POST',
+    redirect: 'follow',
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({ token: localStorage.getItem('token') })
+  })
+    .then(() => window.location.pathname = '/app')
+    .catch((e) => { console.log(e); });
 }
 // なければ初回アクセスだとみなし、サーバから token を取得する
 else {
   fetch(`${baseURL}/api/token`, {
-      method: 'POST'
+      method: 'POST',
+      redirect: 'follow'
   })
     .then((data) => data.json())
     // localstorage 使って ブラウザに保存する
