@@ -36,9 +36,6 @@ class Api::ItemsController < ApplicationController
       item.name = "pants"
     end
 
-    p item
-    p item_params
-
     item.update_attributes(item_params)
   end
 
