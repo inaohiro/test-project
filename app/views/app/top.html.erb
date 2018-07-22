@@ -26,8 +26,8 @@
     <p class="weekly-weather-title">Weekly Weather</p>
     <div class="week-box">
       <% pants_count = @item.current if @item.current != nil %>
-      <% for i in 1..9 do %>
-      <li class="<%= i % 3 == 1 ? "orange" : i % 3 == 2 ? "yellow" : "blue" %>">
+      <% for i in 0..9 do %>
+      <li class="<%= i % 3 == 0 ? "orange" : i % 3 == 1 ? "yellow" : "blue" %>">
         <div class="week-left"><p><%= @data[i]["date"] %><br><%= @data[i]["day_of_the_week"] %></p></div>
         <div class="week-right">
           <p class="pants-will">Pants Count：<%= pants_count %></p><br>
