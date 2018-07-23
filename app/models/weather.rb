@@ -22,13 +22,14 @@ class Weather < ApplicationRecord
             		arr.push(s)
         	end
         	other2 = arr[7..31]+arr[46..70]
-    	end
+		end
 
-	def getplace(doc)
-		doc.xpath("//ol[@class='breadcrumb-navi clearfix']/li[4]/a/span").inner_text
-	end
+		# 場所の取得
+		def getplace(doc)
+			doc.xpath("//ol[@class='breadcrumb-navi clearfix']/li[4]/a/span").inner_text
+		end
 
-    	#日付と曜日取得
+		#日付と曜日取得
     	def getdate(other2,date,day_of_the_week)
 
         	for i in 0..9 do
@@ -46,20 +47,40 @@ class Weather < ApplicationRecord
         	end
     	end
 
-    	#降水量取得
-    	def getrainprobability(other2,rainprobability)
+    	#１日の降水確率取得
+    	def getdailyrainprobability(other2,rainprobability)
         	for i in 0..9 do
             		rainprobability[i]=other2[5*i+3].delete("%").to_i
         	end
     	end
 
-    	#天気(午前午後)取得
-    	def getweather(other,weatherAM,weatherPM)
+		#降水確率(6h毎)取得
+    	def getrainprobability(other,rainprobabilityAM3,rainprobabilityAM9,rainprobabilityPM3,rainprobabilityPM9)
         	for i in 0..39 do
-        		if i%4 == 1 then
-        	        	weatherAM.push(other[i*7+1])
-        	    	elsif i%4 == 2 then
-                		weatherPM.push(other[i*7+1])
+        		if i%4 == 0 then
+        	        	rainprobabilityAM3.push(other[i*7+3].delete("%").to_i)
+        	    	elsif i%4 == 1 then
+						rainprobabilityAM9.push(other[i*7+3].delete("%").to_i)
+					elsif i%4 == 2 then
+						rainprobabilityPM3.push(other[i*7+3].delete("%").to_i)
+        	    	elsif i%4 == 3 then
+                		rainprobabilityPM9.push(other[i*7+3].delete("%").to_i)
+        	    	end
+        	end
+    	end
+
+
+  		#天気(6h毎)取得
+    	def getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
+        	for i in 0..39 do
+        		if i%4 == 0 then
+        	        	weatherAM3.push(other[i*7+1])
+        	    	elsif i%4 == 1 then
+						weatherAM9.push(other[i*7+1])
+					elsif i%4 == 2 then
+						weatherPM3.push(other[i*7+1])
+        	    	elsif i%4 == 3 then
+                		weatherPM9.push(other[i*7+1])
         	    	end
         	end
     	end
@@ -82,33 +103,49 @@ class Weather < ApplicationRecord
         	# htmlをパース(解析)してオブジェクトを生成
         	doc = Nokogiri::HTML.parse(html, nil, charset)
 
+			# ウェブスクレイピングの元データ
         	other = Array.new
         	other2 = Array.new
 
+			# 実際にviewに渡すデータ
         	date = Array.new(10)
-        	day_of_the_week = Array.new
-        	weatherAM= Array.new
-        	weatherPM= Array.new
-        	rainprobability = Array.new
+			day_of_the_week = Array.new
+			weatherAM3= Array.new
+        	weatherAM9= Array.new
+			weatherPM3= Array.new
+			weatherPM9= Array.new
+			rainprobability = Array.new
+			rainprobabilityAM3= Array.new
+        	rainprobabilityAM9= Array.new
+			rainprobabilityPM3= Array.new
+			rainprobabilityPM9= Array.new
 
+			# 元データ取得
         	other = setother(doc,other)
         	other2 = setother2(doc,other2)
 
-		place = getplace(doc)
+			# データ取得
+			place = getplace(doc)
        		getdate(other2,date,day_of_the_week)
-        	getrainprobability(other2,rainprobability)
-
-        	getweather(other,weatherAM,weatherPM)
+        	getdailyrainprobability(other2,rainprobability)
+        	getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
+			getrainprobability(other,rainprobabilityAM3,rainprobabilityAM9,rainprobabilityPM3,rainprobabilityPM9)
 
         	# ハッシュ作成
         	data = Array.new
         	for i in 0..9 do
             		data[i]={}
             		data[i]["date"]=date[i]
-            		data[i]["day_of_the_week"]=day_of_the_week[i]
-            		data[i]["weatherAM"]=weatherAM[i]
-            		data[i]["weatherPM"]=weatherPM[i]
-            		data[i]["rainprobability"]=rainprobability[i]
+					data[i]["day_of_the_week"]=day_of_the_week[i]
+            		data[i]["weatherAM3"]=weatherAM3[i]
+					data[i]["weatherAM9"]=weatherAM9[i]
+					data[i]["weatherPM3"]=weatherPM3[i]
+            		data[i]["weatherPM9"]=weatherPM9[i]
+					data[i]["rainprobability"]=rainprobability[i]
+					data[i]["rainprobabilityAM3"]=rainprobabilityAM3[i]
+					data[i]["rainprobabilityAM9"]=rainprobabilityAM9[i]
+					data[i]["rainprobabilityPM3"]=rainprobabilityPM3[i]
+            		data[i]["rainprobabilityPM9"]=rainprobabilityPM9[i]
         	end
 
 		data.push(place)
@@ -116,8 +153,8 @@ class Weather < ApplicationRecord
 
     	end
 
-    	scrape()
-    
+		scrape()
+
   	end
 
 end
