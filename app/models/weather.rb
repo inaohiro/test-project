@@ -47,14 +47,14 @@ class Weather < ApplicationRecord
         	end
     	end
 
-    	#１日の降水量取得
+    	#１日の降水確率取得
     	def getdailyrainprobability(other2,rainprobability)
         	for i in 0..9 do
             		rainprobability[i]=other2[5*i+3].delete("%").to_i
         	end
     	end
 
-		#天気(午前午後)取得
+		#降水確率(6h毎)取得
     	def getrainprobability(other,rainprobabilityAM3,rainprobabilityAM9,rainprobabilityPM3,rainprobabilityPM9)
         	for i in 0..39 do
         		if i%4 == 0 then
@@ -70,7 +70,7 @@ class Weather < ApplicationRecord
     	end
 
 
-  		#天気(午前午後)取得
+  		#天気(6h毎)取得
     	def getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
         	for i in 0..39 do
         		if i%4 == 0 then
@@ -103,9 +103,11 @@ class Weather < ApplicationRecord
         	# htmlをパース(解析)してオブジェクトを生成
         	doc = Nokogiri::HTML.parse(html, nil, charset)
 
+			# ウェブスクレイピングの元データ
         	other = Array.new
         	other2 = Array.new
 
+			# 実際にviewに渡すデータ
         	date = Array.new(10)
 			day_of_the_week = Array.new
 			weatherAM3= Array.new
@@ -118,13 +120,14 @@ class Weather < ApplicationRecord
 			rainprobabilityPM3= Array.new
 			rainprobabilityPM9= Array.new
 
+			# 元データ取得
         	other = setother(doc,other)
         	other2 = setother2(doc,other2)
 
-		place = getplace(doc)
+			# データ取得
+			place = getplace(doc)
        		getdate(other2,date,day_of_the_week)
         	getdailyrainprobability(other2,rainprobability)
-
         	getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
 			getrainprobability(other,rainprobabilityAM3,rainprobabilityAM9,rainprobabilityPM3,rainprobabilityPM9)
 
