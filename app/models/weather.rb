@@ -55,12 +55,16 @@ class Weather < ApplicationRecord
     	end
 
     	#天気(午前午後)取得
-    	def getweather(other,weatherAM,weatherPM)
+    	getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
         	for i in 0..39 do
-        		if i%4 == 1 then
-        	        	weatherAM.push(other[i*7+1])
-        	    	elsif i%4 == 2 then
-                		weatherPM.push(other[i*7+1])
+        		if i%4 == 0 then
+        	        	weatherAM3.push(other[i*7+1])
+        	    	elsif i%4 == 1 then
+						weatherAM9.push(other[i*7+1])
+					elsif i%4 == 2 then
+						weatherPM3.push(other[i*7+1])
+        	    	elsif i%4 == 3 then
+                		weatherPM9.push(other[i*7+1])
         	    	end
         	end
     	end
@@ -87,9 +91,11 @@ class Weather < ApplicationRecord
         	other2 = Array.new
 
         	date = Array.new(10)
-        	day_of_the_week = Array.new
-        	weatherAM= Array.new
-        	weatherPM= Array.new
+			day_of_the_week = Array.new
+			weatherAM3= Array.new
+        	weatherAM9= Array.new
+			weatherPM3= Array.new
+			weatherPM9= Array.new
         	rainprobability = Array.new
 
         	other = setother(doc,other)
@@ -99,16 +105,18 @@ class Weather < ApplicationRecord
        		getdate(other2,date,day_of_the_week)
         	getrainprobability(other2,rainprobability)
 
-        	getweather(other,weatherAM,weatherPM)
+        	getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
 
         	# ハッシュ作成
         	data = Array.new
         	for i in 0..9 do
             		data[i]={}
             		data[i]["date"]=date[i]
-            		data[i]["day_of_the_week"]=day_of_the_week[i]
-            		data[i]["weatherAM"]=weatherAM[i]
-            		data[i]["weatherPM"]=weatherPM[i]
+					data[i]["day_of_the_week"]=day_of_the_week[i]
+            		data[i]["weatherAM3"]=weatherAM3[i]
+					data[i]["weatherAM9"]=weatherAM9[i]
+					data[i]["weatherPM3"]=weatherPM3[i]
+            		data[i]["weatherPM9"]=weatherPM9[i]
             		data[i]["rainprobability"]=rainprobability[i]
         	end
 
@@ -117,8 +125,8 @@ class Weather < ApplicationRecord
 
     	end
 
-    	scrape()
-    
+		scrape()
+
   	end
 
 end
