@@ -1,6 +1,18 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  get 'Weather' => 'weather#controller'
+  #root 'cushions#top'
+  get  'settings' =>  'settings#settings'
+  post 'settings' =>  'settings#create'
+  get  'tutorial' =>  'settings#tutorial'
+  get  'app' => 'app#top'
 
+  namespace :api, { format: 'json' } do
+    resource :token, only: [:create]
+
+    get  'items' => 'items#index'
+    post 'items' => 'items#create'
+  end
+
+  get 'Weather' => 'weather#controller'
 end

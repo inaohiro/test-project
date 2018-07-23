@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_17_011838) do
+ActiveRecord::Schema.define(version: 2018_07_18_152745) do
+
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.integer "max"
+    t.integer "current"
+    t.integer "token_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_id"], name: "index_items_on_token_id"
+  end
+
+  create_table "tokens", force: :cascade do |t|
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "weathers", force: :cascade do |t|
     t.datetime "created_at", null: false
