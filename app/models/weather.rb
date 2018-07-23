@@ -48,9 +48,9 @@ class Weather < ApplicationRecord
     	end
 
     	#１日の降水量取得
-    	def getdailyrainprobability(other2,dailyrainprobability)
+    	def getdailyrainprobability(other2,rainprobability)
         	for i in 0..9 do
-            		dailyrainprobability[i]=other2[5*i+3].delete("%").to_i
+            		rainprobability[i]=other2[5*i+3].delete("%").to_i
         	end
     	end
 
@@ -112,7 +112,7 @@ class Weather < ApplicationRecord
         	weatherAM9= Array.new
 			weatherPM3= Array.new
 			weatherPM9= Array.new
-			dailyrainprobability = Array.new
+			rainprobability = Array.new
 			rainprobabilityAM3= Array.new
         	rainprobabilityAM9= Array.new
 			rainprobabilityPM3= Array.new
@@ -123,7 +123,7 @@ class Weather < ApplicationRecord
 
 		place = getplace(doc)
        		getdate(other2,date,day_of_the_week)
-        	getdailyrainprobability(other2,dailyrainprobability)
+        	getdailyrainprobability(other2,rainprobability)
 
         	getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
 			getrainprobability(other,rainprobabilityAM3,rainprobabilityAM9,rainprobabilityPM3,rainprobabilityPM9)
@@ -138,7 +138,7 @@ class Weather < ApplicationRecord
 					data[i]["weatherAM9"]=weatherAM9[i]
 					data[i]["weatherPM3"]=weatherPM3[i]
             		data[i]["weatherPM9"]=weatherPM9[i]
-					data[i]["dailyrainprobability"]=dailyrainprobability[i]
+					data[i]["rainprobability"]=rainprobability[i]
 					data[i]["rainprobabilityAM3"]=rainprobabilityAM3[i]
 					data[i]["rainprobabilityAM9"]=rainprobabilityAM9[i]
 					data[i]["rainprobabilityPM3"]=rainprobabilityPM3[i]
