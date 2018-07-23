@@ -24,12 +24,12 @@ class Weather < ApplicationRecord
         	other2 = arr[7..31]+arr[46..70]
 		end
 
-	# 場所の取得
-	def getplace(doc)
-		doc.xpath("//ol[@class='breadcrumb-navi clearfix']/li[4]/a/span").inner_text
-	end
+		# 場所の取得
+		def getplace(doc)
+			doc.xpath("//ol[@class='breadcrumb-navi clearfix']/li[4]/a/span").inner_text
+		end
 
-    	#日付と曜日取得
+		#日付と曜日取得
     	def getdate(other2,date,day_of_the_week)
 
         	for i in 0..9 do
@@ -47,15 +47,31 @@ class Weather < ApplicationRecord
         	end
     	end
 
-    	#降水量取得
-    	def getrainprobability(other2,rainprobability)
+    	#１日の降水量取得
+    	def getdailyrainprobability(other2,dailyrainprobability)
         	for i in 0..9 do
-            		rainprobability[i]=other2[5*i+3].delete("%").to_i
+            		dailyrainprobability[i]=other2[5*i+3].delete("%").to_i
         	end
     	end
 
-    	#天気(午前午後)取得
-    	getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
+		#天気(午前午後)取得
+    	def getrainprobability(other,rainprobabilityAM3,rainprobabilityAM9,rainprobabilityPM3,rainprobabilityPM9)
+        	for i in 0..39 do
+        		if i%4 == 0 then
+        	        	rainprobabilityAM3.push(other[i*7+3].delete("%").to_i)
+        	    	elsif i%4 == 1 then
+						rainprobabilityAM9.push(other[i*7+3].delete("%").to_i)
+					elsif i%4 == 2 then
+						rainprobabilityPM3.push(other[i*7+3].delete("%").to_i)
+        	    	elsif i%4 == 3 then
+                		rainprobabilityPM9.push(other[i*7+3].delete("%").to_i)
+        	    	end
+        	end
+    	end
+
+
+  		#天気(午前午後)取得
+    	def getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
         	for i in 0..39 do
         		if i%4 == 0 then
         	        	weatherAM3.push(other[i*7+1])
@@ -96,16 +112,21 @@ class Weather < ApplicationRecord
         	weatherAM9= Array.new
 			weatherPM3= Array.new
 			weatherPM9= Array.new
-        	rainprobability = Array.new
+			dailyrainprobability = Array.new
+			rainprobabilityAM3= Array.new
+        	rainprobabilityAM9= Array.new
+			rainprobabilityPM3= Array.new
+			rainprobabilityPM9= Array.new
 
         	other = setother(doc,other)
         	other2 = setother2(doc,other2)
 
 		place = getplace(doc)
        		getdate(other2,date,day_of_the_week)
-        	getrainprobability(other2,rainprobability)
+        	getdailyrainprobability(other2,dailyrainprobability)
 
         	getweather(other,weatherAM3,weatherAM9,weatherPM3,weatherPM9)
+			getrainprobability(other,rainprobabilityAM3,rainprobabilityAM9,rainprobabilityPM3,rainprobabilityPM9)
 
         	# ハッシュ作成
         	data = Array.new
@@ -117,7 +138,11 @@ class Weather < ApplicationRecord
 					data[i]["weatherAM9"]=weatherAM9[i]
 					data[i]["weatherPM3"]=weatherPM3[i]
             		data[i]["weatherPM9"]=weatherPM9[i]
-            		data[i]["rainprobability"]=rainprobability[i]
+					data[i]["dailyrainprobability"]=dailyrainprobability[i]
+					data[i]["rainprobabilityAM3"]=rainprobabilityAM3[i]
+					data[i]["rainprobabilityAM9"]=rainprobabilityAM9[i]
+					data[i]["rainprobabilityPM3"]=rainprobabilityPM3[i]
+            		data[i]["rainprobabilityPM9"]=rainprobabilityPM9[i]
         	end
 
 		data.push(place)
