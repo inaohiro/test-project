@@ -22,8 +22,9 @@ class Weather < ApplicationRecord
             		arr.push(s)
         	end
         	other2 = arr[7..31]+arr[46..70]
-    	end
+		end
 
+	# 場所の取得
 	def getplace(doc)
 		doc.xpath("//ol[@class='breadcrumb-navi clearfix']/li[4]/a/span").inner_text
 	end
