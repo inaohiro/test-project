@@ -1,0 +1,2 @@
+class ResetController < ApplicationController
+end
