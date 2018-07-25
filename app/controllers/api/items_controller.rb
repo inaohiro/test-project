@@ -2,7 +2,8 @@ class Api::ItemsController < ApplicationController
   protect_from_forgery :except => ["index", "create"]
 
   def index
-    weather = Weather.new.webscrape()
+    url = 'https://tenki.jp/forecast/3/16/4410/13113/10days.html'
+    weather = Weather.new.webscrape(url)
     item = current_user.items.first
 
     if item == nil
