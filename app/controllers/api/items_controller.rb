@@ -36,14 +36,14 @@ class Api::ItemsController < ApplicationController
       item.name = "pants"
       location = current_user.build_location({name: params[:location]})
     end
-
+    Location.new.getlocation(params[:location])
     item.update_attributes({max: params[:max],current: params[:current]})
-    location.update_attributes(params[:location])
+    location.update_attributes({name: params[:location]})
   end
 
   def updatepants
     item = current_user.items.first
-    item.update_attributes(params[:current])
+    item.update_attributes({current: params[:current]})
   end
 
   private

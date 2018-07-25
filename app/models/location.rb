@@ -29,7 +29,7 @@ class Location < ApplicationRecord
       "fuchushi" =>['https://tenki.jp/forecast/3/16/4410/13206/10days.html', "府中市"]
     }
 
-    p hash[value]
+    hash[value][0]
 
   end
 
