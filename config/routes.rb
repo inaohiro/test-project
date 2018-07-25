@@ -5,16 +5,19 @@ Rails.application.routes.draw do
   #get  'settings' =>  'settings#settings'
   #post 'settings' =>  'settings#create'
   #get  'tutorial' =>  'settings#tutorial'
-  get  'app' => 'app#top'
+  #get  'app' => 'app#top'
   get  'reset' => 'reset#hoge'
 
   namespace :api, { format: 'json' } do
     resource :token, only: [:create]
-    post 'update' => 'items#updatepants'
-    get  'items' => 'items#index'
-    post 'items' => 'items#create'
-    get 'weathers' => 'weathers#index'
+    post 'update'   => 'items#updatepants'
+    get  'items'    => 'items#index'
+    post 'items'    => 'items#create'
+    get  'weathers' => 'weathers#index'
   end
 
-  get 'Weather' => 'weather#controller'
+  #get 'Weather' => 'weather#controller'
+
+  # redirect all unknown routes to root_url
+  get  '*path' => redirect('/')
 end
