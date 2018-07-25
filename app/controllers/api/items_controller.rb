@@ -34,7 +34,7 @@ class Api::ItemsController < ApplicationController
     else
       item = current_user.items.build(item_params)
       item.name = "pants"
-      location = current_user.location.build(params[:location])
+      location = current_user.build_location(params[:location])
     end
 
     item.update_attributes(item_params)
