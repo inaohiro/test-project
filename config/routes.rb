@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   namespace :api, { format: 'json' } do
     resource :token, only: [:create]
-
+    post 'update' => 'items#updatepants'
     get  'items' => 'items#index'
     post 'items' => 'items#create'
     get 'weathers' => 'weathers#index'

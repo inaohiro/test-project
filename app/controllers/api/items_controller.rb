@@ -41,6 +41,11 @@ class Api::ItemsController < ApplicationController
     location.update_attributes(params[:location])
   end
 
+  def updatepants
+    item = current_user.items.first
+    item.update_attributes(params[:current])
+  end
+
   private
     def item_params
       params.require(:item).permit(:name, :max, :current)
