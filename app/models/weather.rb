@@ -2,7 +2,7 @@
 
 class Weather < ApplicationRecord
 
-  def webscrape()
+  def webscrape(url)
 	# ウェブスクレイピング元データ1
         def setother(doc,other)
         	arr = Array.new
@@ -86,13 +86,13 @@ class Weather < ApplicationRecord
     	end
 
     	#本体
-    	def scrape()
+    	def scrape(url)
         	# URLにアクセスするためのライブラリの読み込み
         	require 'open-uri'
         	# Nokogiriライブラリの読み込み
         	require 'nokogiri'
         	# スクレイピング先のURL
-        	url = 'https://tenki.jp/forecast/3/16/4410/13113/10days.html'
+        	# url = 'https://tenki.jp/forecast/3/16/4410/13113/10days.html'
 
         	charset = nil
         	html = open(url) do |f|
@@ -153,7 +153,7 @@ class Weather < ApplicationRecord
 
     	end
 
-		scrape()
+		scrape(url)
 
   	end
 
