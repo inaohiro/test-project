@@ -18,6 +18,6 @@ Rails.application.routes.draw do
 
   #get 'Weather' => 'weather#controller'
 
-  # redirect all unknown routes to root_url
-  get  '*path' => redirect('/')
+  # redirect to root if user directly access to /settings
+  get  'settings' => redirect('/')
 end
