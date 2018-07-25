@@ -1,5 +1,5 @@
 class Api::ItemsController < ApplicationController
-  protect_from_forgery :except => ["index", "create"]
+  protect_from_forgery :except => ["index", "create", "updatepants"]
 
   def index
     # url = 'https://tenki.jp/forecast/3/16/4410/13113/10days.html'
@@ -34,17 +34,18 @@ class Api::ItemsController < ApplicationController
     else
       item = current_user.items.build
       item.name = "pants"
-      location = current_user.build_location({name: params[:location]})
+      location = current_user.build_location({ name: params[:location] })
     end
+
     url = Location.new.getlocation(params[:location])
-    item.update_attributes({max: params[:max],current: params[:current]})
-    location.update_attributes({name: params[:location],url: url})
+    item.update_attributes({ max: params[:max], current: params[:current] })
+    location.update_attributes({ name: params[:location], url: url })
 
   end
 
   def updatepants
     item = current_user.items.first
-    item.update_attributes({current: params[:current]})
+    item.update_attributes({ current: params[:current] })
   end
 
   private
