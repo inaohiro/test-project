@@ -34,7 +34,7 @@ class Api::ItemsController < ApplicationController
     else
       item = current_user.items.build
       item.name = "pants"
-      location = current_user.build_location(params[:location])
+      location = current_user.build_location({location: params[:location]})
     end
 
     item.update_attributes( {max: params[:max],current: params[:current] })
