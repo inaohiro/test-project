@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   #post 'settings' =>  'settings#create'
   #get  'tutorial' =>  'settings#tutorial'
   get  'app' => 'app#top'
+  get  'reset' => 'reset#hoge'
 
   namespace :api, { format: 'json' } do
     resource :token, only: [:create]
