@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_18_152745) do
+ActiveRecord::Schema.define(version: 2018_07_25_045059) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
@@ -22,10 +22,28 @@ ActiveRecord::Schema.define(version: 2018_07_18_152745) do
     t.index ["token_id"], name: "index_items_on_token_id"
   end
 
+  create_table "locations", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.integer "token_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_id"], name: "index_locations_on_token_id"
+  end
+
   create_table "tokens", force: :cascade do |t|
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "urls", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.integer "token_id_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_id_id"], name: "index_urls_on_token_id_id"
   end
 
   create_table "weathers", force: :cascade do |t|

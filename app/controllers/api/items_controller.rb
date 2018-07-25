@@ -30,13 +30,16 @@ class Api::ItemsController < ApplicationController
 
   def create
     if current_user.items.length > 0
+      location = current_user.location
       item = current_user.items.first
     else
       item = current_user.items.build(item_params)
       item.name = "pants"
+      location = current_user.location.build(params[:location])
     end
 
     item.update_attributes(item_params)
+    location.update_attributes(params[:location])
   end
 
   private
