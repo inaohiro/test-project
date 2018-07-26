@@ -1,6 +1,7 @@
 class Token < ApplicationRecord
   has_many :items
   has_one :location
+  has_one :notification
   #validates :hashed_token, presence: true
   validates :token, presence: true
 
