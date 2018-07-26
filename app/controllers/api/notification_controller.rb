@@ -3,7 +3,9 @@ class Api::NotificationController < ApplicationController
   protect_from_forgery :except => ["get", "push"]
 
   def get
-    Notification.new.notify(current_user.notification.notification_token) unless current_user.notification.notification_token.empty?
+    if current_user.notification
+      Notification.new.notify( current_user.notification.notification_token )
+    end
   end
 
   def push
