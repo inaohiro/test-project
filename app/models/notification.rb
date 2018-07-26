@@ -1,7 +1,7 @@
 class Notification < ApplicationRecord
   belongs_to :token
 
-  def send(notification_token)
+  def notify(notification_token)
     if ENV["SERVER_ID"]
       serverid = ENV["SERVER_ID"]
 
