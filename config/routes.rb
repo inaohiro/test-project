@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     get  'items'    => 'items#index'
     post 'items'    => 'items#create'
     get  'weathers' => 'weathers#index'
+    post 'notification' => 'notification#push'
   end
 
   #get 'Weather' => 'weather#controller'

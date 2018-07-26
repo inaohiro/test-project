@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  notification_token: MyString
+  token_id: one
+
+two:
+  notification_token: MyString
+  token_id: two
