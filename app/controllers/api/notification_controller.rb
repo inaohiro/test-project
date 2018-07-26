@@ -1,7 +1,7 @@
 class Api::NotificationController < ApplicationController
 
   def get
-    Notification.send(current_user.notification_token) if current_user.notification_token
+    Notification.send(current_user.notification_token) unless current_user.notification_token.empty?
   end
 
   def push
