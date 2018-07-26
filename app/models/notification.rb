@@ -7,12 +7,12 @@ class Notification < ApplicationRecord
 
       # header1 = "Authorization: key=#{serverid}"
       # header2 = "Content-Type: application/json"
-      # data = {
-      #   to: notification_token,
-      #   notification: {
-      #     body: "Hi, I\'m Pants Manager"
-      #   }
-      # }
+      data = {
+        to: notification_token,
+        notification: {
+          body: "Hi, I\'m Pants Manager"
+        }
+      }
 
       # system("curl -X POST --header #{header1} --header #{header2} -d #{data.to_json} https://fcm.googleapis.com/fcm")
 
