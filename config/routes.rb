@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   #get  'tutorial' =>  'settings#tutorial'
   #get  'app' => 'app#top'
   get  'reset' => 'reset#hoge'
+  get  'checkpants' => 'checkpants#getFewpantsToken'
 
   namespace :api, { format: 'json' } do
     resource :token, only: [:create]
