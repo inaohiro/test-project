@@ -1,0 +1,2 @@
+module CheckpantsHelper
+end

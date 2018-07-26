@@ -1,0 +1,2 @@
+class CheckpantsController < ApplicationController
+end
