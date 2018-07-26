@@ -3,7 +3,10 @@ class Notification < ApplicationRecord
 
   def send(notification_token)
     if ENV["SERVER_ID"]
-      SERVER_ID = ENV["SERVER_ID"]
+      serverid = ENV["SERVER_ID"]
+
+      header1 = "Authorization: key=#{serverid}"
+      header2 = "Content-Type: application/json"
       data = {
         to: notification_token,
         notification: {
@@ -11,7 +14,7 @@ class Notification < ApplicationRecord
         }
       }
 
-      system("curl -X POST --header #{SERVER_ID} --header \"Content-Type: application/json\" -d #{data.to_json} https://fcm.googleapis.com/fcm")
+      system("curl -X POST --header #{header1} --header #{header2} -d #{data.to_json} https://fcm.googleapis.com/fcm")
     else
     end
   end
